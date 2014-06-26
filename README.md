@@ -4,7 +4,7 @@ Node.js module that makes it simple to append new rows to a spreadsheet.
 
 * Integrates with [Google Spreadsheet API v3](https://developers.google.com/google-apps/spreadsheets/#adding_a_list_row)
 * Authorization is done by OAuth 2.0 and JSON Web Token (JWT).
-* Uses ES6 generator functions for simple flow control.
+* --Uses ES6 generator functions for simple flow control.-- (translated to ES5)
 
 See more instruction here in this great blog post: [Accessing Google Spreadsheets from Node.js](http://www.nczonline.net/blog/2014/03/04/accessing-google-spreadsheets-from-node-js/).
 
@@ -13,7 +13,7 @@ See more instruction here in this great blog post: [Accessing Google Spreadsheet
 
 ## Installation
 
-  	npm install google-spreadsheets-append
+  	--npm install google-spreadsheets-append-- (not on npm yet)
   
 
 ## Create a Service Account and share spreadsheet
@@ -28,7 +28,6 @@ See more instruction here in this great blog post: [Accessing Google Spreadsheet
 
 
 ## Example usage
-  	var moment = require('moment');
   	var Spreadsheet = require('google-spreadsheets-append');
   	var spreadsheet = Spreadsheet({
     	auth: {
@@ -39,7 +38,7 @@ See more instruction here in this great blog post: [Accessing Google Spreadsheet
   	});
   
   	// append new row
-  	yield spreadsheet.add({timestamp: moment().format("M/D/YYYY HH:mm:ss"), email: "a@a.com"});
+  	spreadsheet.add({timestamp: new Date(), email: "a@a.com"}, function(err, res){});
   
 
 ## MIT License
