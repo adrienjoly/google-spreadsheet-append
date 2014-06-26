@@ -2,10 +2,6 @@ var debug = require('debug')('spreadsheet');
 var googleAuth = require('google-oauth-jwt');
 var js2xmlparser = require("js2xmlparser");
 var request = require('request');
-var thunk = require('thunkify');
-
-// generator extended Google Auth
-var authenticate = thunk(googleAuth.authenticate);
 
 // token cache
 var tokens = {};
@@ -26,9 +22,8 @@ function Spreadsheet (options) {
   this.sheetId = options.sheetId || "od6";
 }
 
-Spreadsheet.prototype.login = function *(options) {
+Spreadsheet.prototype.login = function(options, cb) {
   options = options || {};
-  
   if (!options.email) throw new Error('auth.email is required');
   if (!(options.keyFile || options.key)) throw new Error("private key (auth.key or auth.keyFile) required");
   if (!Array.isArray(options.scopes)) {
@@ -37,17 +32,10 @@ Spreadsheet.prototype.login = function *(options) {
       'https://docs.google.com/feeds/'
     ];
   }
-  
-  try {
-    var token = yield authenticate(options);
-  } catch (err) {
-    debug('auth error', JSON.stringify(err), options);
-  }
-  
-  return token;
+  googleAuth.authenticate(options, cb);
 }
 
-Spreadsheet.prototype.add = function *(row) {
+Spreadsheet.prototype.add = function(row, cb) {
   // create entry xml for row
   var data = {
     "@": {
@@ -67,40 +55,41 @@ Spreadsheet.prototype.add = function *(row) {
       include: false
     }
   });
+
+  var url = "https://spreadsheets.google.com/feeds/list/" + this.fileId + "/" + this.sheetId + "/private/full?alt=json";
   
+  function doIt(err, token){
+    post(url, {
+      headers: {
+        "Authorization": "Bearer " + token,
+        "Content-Type": "application/atom+xml",
+      },
+      body: xml
+    }, cb);
+  }
+
   // get token
   var token;
   if (this.auth.email in tokens) {
-    token = tokens[this.auth.email];
+    doIt(tokens[this.auth.email]);
   } else {
-    token = yield this.login(this.auth);
+    this.login(this.auth, doIt);
   }
-  
-  // Append row to spreadsheet list feed
-  return yield post("https://spreadsheets.google.com/feeds/list/" + this.fileId + "/" + this.sheetId + "/private/full?alt=json", {
-    headers: {
-      "Authorization": "Bearer " + token,
-      "Content-Type": "application/atom+xml",
-    },
-    body: xml
-  });
 }
 
 
-function post (url, options) {
-  return function (fn) {
-    debug('POST', url, options);
-    request.post(url, options, function (err, res, body) {
-      if (err) {
-        fn(err);
-      } else if (res.statusCode < 200 || res.statusCode >= 300) {
-        debug('POST error', url, options, err, res.statusCode, body);
-        fn(new Error(body));
-      } else {
-        fn();
-      };
-    });
-  }
+function post (url, options, fn) {
+  debug('POST', url, options);
+  request.post(url, options, function (err, res, body) {
+    if (err) {
+      fn(err);
+    } else if (res.statusCode < 200 || res.statusCode >= 300) {
+      debug('POST error', url, options, err, res.statusCode, body);
+      fn(new Error(body));
+    } else {
+      fn();
+    };
+  });
 }
 
 module.exports = Spreadsheet;
