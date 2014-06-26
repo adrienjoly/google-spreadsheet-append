@@ -13,7 +13,7 @@ See more instruction here in this great blog post: [Accessing Google Spreadsheet
 
 ## Installation
 
-  	~~npm install google-spreadsheets-append~~ (fork not on npm yet)
+~~npm install google-spreadsheets-append~~ (fork not on npm yet)
   
 
 ## Create a Service Account and share spreadsheet
