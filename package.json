@@ -1,5 +1,5 @@
 {
-  "name": "google-spreadsheet-append-ES5",
+  "name": "google-spreadsheet-append-es5",
   "version": "0.0.4",
   "description": "Append rows to a Google Spreadsheet. Fork of the google-spreadsheet-append module by anrim.",
   "main": "index.js",
