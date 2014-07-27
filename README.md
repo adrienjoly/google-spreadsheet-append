@@ -26,6 +26,7 @@ See more instruction here in this great blog post: [Accessing Google Spreadsheet
 6. Share a spreadsheet with service account email address
 7. Copy the file ID from the spreadsheet URL: "https://docs.google.com/a/gmail.com/spreadsheets/d/{fileId}/edit"
 8. The first row of your spreadsheet must contain the names of the fields (one per column) you're going to submit for each record
+9. Note that the fields should be provided to the add() method in lowercase form.
 
 
 ## Example usage
