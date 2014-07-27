@@ -13,7 +13,7 @@ See more instruction here in this great blog post: [Accessing Google Spreadsheet
 
 ## Installation
 
-~~npm install google-spreadsheets-append~~ (fork not on npm yet)
+    npm install google-spreadsheet-append-es5
   
 
 ## Create a Service Account and share spreadsheet
@@ -25,6 +25,7 @@ See more instruction here in this great blog post: [Accessing Google Spreadsheet
 5. Copy the email address in Credentials > "Service Account"
 6. Share a spreadsheet with service account email address
 7. Copy the file ID from the spreadsheet URL: "https://docs.google.com/a/gmail.com/spreadsheets/d/{fileId}/edit"
+8. The first row of your spreadsheet must contain the names of the fields (one per column) you're going to submit for each record
 
 
 ## Example usage
@@ -43,7 +44,7 @@ See more instruction here in this great blog post: [Accessing Google Spreadsheet
 
 ## MIT License
 
-Copyright © 2014 Andreas Rimbe <a@rimbe.net>
+Copyright © 2014 Andreas Rimbe <a@rimbe.net> + Adrien Joly
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
